@@ -1,20 +1,16 @@
-<!-- Copyright (c) Microsoft Corporation. All rights reserved. Licensed under the MIT License. -->
 <!DOCTYPE html>
 <html>
-
 <head>
     <!-- Office JavaScript API -->
     <script type="text/javascript" src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js"></script>
 </head>
-
 <body>
-    <p>This add-in will insert the text 'Hello world!'.</p>
-    <button id="helloButton">Say hello</button>
-
-    <!-- The following image URL tracks diagnostic data for this sample add-in. Please remove the image tag if you reuse this sample in your own code project. -->
+    <p>This add-in will insert the text you type below.</p>
+    <!-- Agregar una barra de texto -->
+    <input type="text" id="textInput" placeholder="Type your text here">
+    <button id="helloButton">Insert text</button>
     <img src="https://pnptelemetry.azurewebsites.net/pnp-officeaddins/samples/word-add-in-hello-world-run" />
 </body>
-
 <script>
     Office.onReady((info) => {
         // Check that we loaded into Word
@@ -24,15 +20,18 @@
     });
 
     function sayHello() {
+    var textToInsert = document.getElementById("textInput").value;
     return Word.run((context) => {
-        // insert a paragraph at the start of the document.
-        const paragraph = context.document.body.insertParagraph("Hello World by Moodbit", Word.InsertLocation.start);
-        
-        // sync the context to run the previous API call, and return.
+        // Crear un rango en la posición actual del cursor
+        var range = context.document.getSelection();
+
+        // insertar el texto en el rango
+        range.insertText(textToInsert, Word.InsertLocation.replace);
+
+        // sincronizar el contexto para ejecutar la llamada API anterior, y regresar.
         return context.sync();
     });
 }
 
 </script>
-
 </html>
